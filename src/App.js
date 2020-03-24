@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from './index';
+import Task from './Task';
 
 function App() {
 
@@ -11,11 +12,9 @@ function App() {
     if (tasks && tasks.length) {
       return tasks.map((task, index) => {
         return (
-          <li key={index}>
-            {task.id} : {task.name}
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
-            <button onClick={() => editTask(task.id)}>Edit</button>
-          </li>
+          <Task key={index} task={task}
+            deleteTask={deleteTask}
+            editTask={editTask} />
         )
       })
     }
@@ -41,10 +40,10 @@ function App() {
   }
 
   const deleteTask = (id) => {
-    firestore.collection("tasks").doc(id+'').delete()
+    firestore.collection("tasks").doc(id + '').delete()
   }
   const editTask = (id) => {
-    firestore.collection("tasks").doc(id+'').set({id, name})
+    firestore.collection("tasks").doc(id + '').set({ id, name })
   }
 
   const addTask = () => {
@@ -57,7 +56,7 @@ function App() {
       <h1>todo</h1>
       <input type='text' name='name' onChange={e => setName(e.target.value)} />
       <button onClick={addTask}>submit</button>
-      <ul>{renderTask()}</ul>
+      <ul style={{display: 'flex', listStyle: 'none'}}>{renderTask()}</ul>
     </div>
   );
 }
